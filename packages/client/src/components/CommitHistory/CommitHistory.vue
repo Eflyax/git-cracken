@@ -58,7 +58,6 @@
 				<pane
 					:size="commit_refs_column_size"
 					class="pane-branches"
-					min-size="25"
 				>
 					<recycle-scroller
 						v-if="commits !== undefined"
@@ -79,7 +78,7 @@
 				<pane
 					:size="commit_graph_column_size"
 					ref="graph_pane"
-					min-size="20"
+					min-size="80"
 					class="graph-pane"
 					@scroll="onScroll"
 				>

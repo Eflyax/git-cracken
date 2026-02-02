@@ -7,11 +7,10 @@
 				:height="svgDimensions.height"
 			>
 				<g v-for="commit in commits" :key="commit.hash">
-
 					<template v-for="parentHash in commit.parents" :key="parentHash">
 						<path
 							v-if="commitMap.get(parentHash)"
-							:d="getBezierPath(commit, parentHash)"
+							:d="getTopologyPath(commit, parentHash)"
 							:stroke="getColor(commit.level)"
 							:stroke-width="CONFIG.LINE_WIDTH"
 							fill="none"
@@ -75,13 +74,14 @@ export default {
 	data() {
 		return {
 			CONFIG: {
-				X_STEP: 20,
+				X_STEP: 30,
 				Y_STEP: 36,
-				CIRCLE_R: 5,
+				CIRCLE_R: 10,
 				LINE_WIDTH: 2,
 				PADDING_LEFT: 15,
 				PADDING_TOP: 18,
-				COLORS: ['#00BFFF', '#F06292', '#66BB6A', '#FFD54F', '#FF7043', '#AB47BC']
+				COLORS: ['#00BFFF', '#F06292', '#66BB6A', '#FFD54F', '#FF7043', '#AB47BC'],
+				CORNER_RADIUS: 10,
 			}
 		}
 	},
@@ -115,27 +115,69 @@ export default {
 			};
 		}
 	},
+	mounted() {
+		console.log(this.commits);
+
+	},
 	methods: {
-		getBezierPath(commit, parentHash) {
-			const parent = this.commitMap.get(parentHash);
+		getTopologyPath(commit, parentHash) {
+			const
+				parent = this.commitMap.get(parentHash);
 
 			if (!parent) {
 				return null;
 			}
 
-			const startX = this.CONFIG.PADDING_LEFT + commit.level * this.CONFIG.X_STEP;
-			const startY = this.CONFIG.PADDING_TOP + commit.index * this.CONFIG.Y_STEP;
+			const
+				startX = this.CONFIG.PADDING_LEFT + commit.level * this.CONFIG.X_STEP,
+				startY = this.CONFIG.PADDING_TOP + commit.index * this.CONFIG.Y_STEP,
+				endX = this.CONFIG.PADDING_LEFT + parent.level * this.CONFIG.X_STEP,
+				endY = this.CONFIG.PADDING_TOP + parent.index * this.CONFIG.Y_STEP;
 
-			const endX = this.CONFIG.PADDING_LEFT + parent.level * this.CONFIG.X_STEP;
-			const endY = this.CONFIG.PADDING_TOP + parent.index * this.CONFIG.Y_STEP;
+			if (commit.level === parent.level) {
+				return `M ${startX} ${startY + this.CONFIG.CIRCLE_R} L ${endX} ${endY - this.CONFIG.CIRCLE_R}`;
+			}
 
-			return `
-				M ${startX} ${startY}
-				C ${startX} ${startY + this.CONFIG.Y_STEP / 2},
-					${endX}   ${endY - this.CONFIG.Y_STEP / 2},
-					${endX}   ${endY}
-			`;
+			const
+				deltaLevel = commit.level - parent.level,
+				xDir = endX > startX ? 1 : -1,
+				yDir = 1;
+
+			if (deltaLevel < 0) {
+				const
+					fromX = startX + (this.CONFIG.CIRCLE_R * xDir),
+					fromY = startY,
+					targetX = endX,
+					targetY = endY - this.CONFIG.CIRCLE_R,
+					width = Math.abs(endX - startX),
+					height = Math.abs(endY - startY),
+					r = Math.min(this.CONFIG.CORNER_RADIUS, width / 2, height / 2);
+
+				return `
+					M ${fromX} ${fromY}
+					L ${targetX - (r * xDir)} ${fromY}
+					Q ${targetX} ${fromY} ${targetX} ${fromY + r}
+					L ${targetX} ${targetY}
+				`;
+			}
+			else {
+				const
+					fromX = startX,
+					fromY = startY + (this.CONFIG.CIRCLE_R * yDir),
+					targetX = endX - (this.CONFIG.CIRCLE_R * xDir),
+					targetY = endY,
+					r = Math.min(this.CONFIG.CORNER_RADIUS, Math.abs(endY - startY) / 2);
+
+				return `
+					M ${fromX} ${fromY}
+					L ${fromX} ${targetY - r}
+					Q ${fromX} ${targetY} ${fromX + (r * xDir)} ${targetY}
+					L ${targetX} ${targetY}
+				`;
+			}
 		},
+
+
 		getColor(level) {
 			return this.CONFIG.COLORS[level % this.CONFIG.COLORS.length];
 		},
