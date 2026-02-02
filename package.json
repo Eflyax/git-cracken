@@ -1,0 +1,24 @@
+{
+	"name": "git-cracken",
+	"version": "0.1.0",
+	"description": "Webbased client for Git.",
+	"license": "MIT",
+	"author": {
+		"name": "Jakub Záruba",
+		"url": "https://github.com/Eflyax"
+	},
+	"type": "module",
+	"scripts": {
+		"client": "yarn workspace @git-cracken/client",
+		"server": "yarn workspace @git-cracken/server"
+	},
+	"private": true,
+	"workspaces": [
+		"packages/*"
+	],
+	"devDependencies": {
+		"bun-types": "^1.3.8",
+		"sass-embedded": "^1.97.3",
+		"vite": "^7.3.1"
+	}
+}

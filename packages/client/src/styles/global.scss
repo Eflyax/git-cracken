@@ -1,0 +1,138 @@
+
+$primary: #005461;
+$secondary: #0C7779;
+$tertiary: #249E94;
+$quaternary: #3BC1A8;
+
+html, body {
+	height: 100%;
+	overflow: hidden;
+}
+
+.n-config-provider {
+	height: 100%;
+}
+
+#app {
+	width: 100%;
+	height: 101%;
+	background-color: $primary;
+	color: papayawhip;
+}
+
+svg {
+	height: 20px;
+}
+
+.app-root {
+	display: flex;
+	flex-direction: row;
+	height: 100%;
+	padding: 5px;
+
+	.splitpanes--vertical > .splitpanes__splitter {
+		min-width: 5px;
+		cursor: col-resize;
+		background-color: $secondary;
+		margin: 5px;
+	}
+
+	.splitpanes {
+		width: 100% !important;
+		height: 100% !important;
+	}
+
+	.n-split {
+		border: 1px solid yellow;
+		padding: 10px;
+		margin: 10px;
+	}
+
+	.repos {
+		border: 3px solid $secondary;
+		border-radius: 4px;
+		margin-right: 5px;
+		padding: 3px;
+	}
+
+	.tab-wrapper {
+		width: 100%;
+
+		.tab-content {
+			height: 100%;
+			background-color: $primary;
+
+			.main-content {
+				border: 3px solid $secondary;
+				border-radius: 4px;
+				height: 100%;
+			}
+		}
+
+		.reference-list {
+			.header {
+				border: 2px solid $tertiary;
+				display: flex;
+				align-items: center;
+				gap: 10px;
+			}
+
+			.reference-row {
+				display: flex;
+				align-items: center;
+				padding: 0 5px;
+				cursor: pointer;
+				gap: 5px;
+
+				&:hover {
+					background-color: #f0f0f0;
+					color: black;
+				}
+			}
+		}
+
+		.commit-history {
+			border: 1px solid $tertiary;
+			max-height: 95%;
+			overflow-y: auto;
+
+			.pane-branches {
+				margin-top: 7px;
+
+				.commit-refs-row {
+					/* border: 1px solid blue; */
+				}
+			}
+
+			.commit-graph {
+				position: relative;
+			}
+
+			.commit-row {
+				height: 35px;
+				/* border: 1px solid red; */
+				overflow-x: hidden;
+				display: flex;
+
+				&.active {
+					background-color: lightskyblue;
+					color: black;
+				}
+			}
+		}
+
+		.graph-pane {
+
+		}
+
+		.file-row {
+			border: 1px solid yellow;
+			display: flex;
+
+			.status {
+				color: $secondary;
+			}
+		}
+
+	}
+}
