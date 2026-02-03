@@ -3,7 +3,7 @@
 		class="commit-refs-row"
 		@click="printInfo"
 	>
-		{{commit.hash}}
+		{{commit.hash.substring(0, 3)}}
 		<!-- <div
 			v-for="reference in references"
 			:class="{
@@ -63,7 +63,8 @@ export default {
 	},
 	methods: {
 		printInfo() {
-			console.log(this.commit);
+			// console.log(this.commit);
+			console.log(this.references);
 		},
 		getTitle(reference) {
 			let title = _.title(reference.type);
