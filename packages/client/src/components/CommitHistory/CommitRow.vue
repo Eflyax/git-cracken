@@ -17,18 +17,14 @@
 		</div>
 		<template v-else>
 			<div
+				class="commit-subject"
 				:title="commit.subject"
 			>
 				{{ commit.subject }}
 			</div>
-			<div>
-				{{ commit.author_name }}
-			</div>
-			<div>
-				{{ commit.committer_date }}
-			</div>
-			<div class="font-mono">
-				{{ commit.hash_abbr }}
+			<div class="commit-meta">
+				<span class="author">{{ commit.author_name }}</span>
+				<span class="hash">{{ commit.hash_abbr }}</span>
 			</div>
 		</template>
 	</div>

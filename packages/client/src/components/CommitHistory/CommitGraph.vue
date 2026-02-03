@@ -31,31 +31,27 @@
 		</div>
 
 		<div class="list-container" :style="{ paddingTop: '0px' }">
-			<div
+			<CommitRow
 				v-for="commit in commits"
 				:key="commit.hash"
-				class="commit-row"
-				:style="{ height: `${CONFIG.Y_STEP}px` }"
-			>
-				<div class="commit-subject" :title="commit.subject">
-					{{ commit.subject }}
-				</div>
-				<div class="commit-meta">
-					<span class="author">{{ commit.author_name }}</span>
-					<span class="hash">{{ commit.hash_abbr }}</span>
-				</div>
-			</div>
+				:commit="commit"
+				:style="{
+					height: `${CONFIG.Y_STEP}px`
+				}"
+
+			/>
 		</div>
 
 	</div>
 </template>
 
 <script>
-import colors from '@/theme/colors';
-import {ECommitHashes} from '@/types';
-
+import CommitRow from './CommitRow.vue';
 
 export default {
+	components: {
+		CommitRow
+	},
 	inject: [
 		'commits',
 		'commit_by_hash',
@@ -80,7 +76,7 @@ export default {
 				LINE_WIDTH: 2,
 				PADDING_LEFT: 15,
 				PADDING_TOP: 18,
-				COLORS: ['#00BFFF', '#F06292', '#66BB6A', '#FFD54F', '#FF7043', '#AB47BC'],
+				COLORS: ['#00C8F0', '#0A7FFF', '#A020FF', '#E020D6', '#FF0084', '#FF0000'],
 				CORNER_RADIUS: 10,
 			}
 		}
@@ -116,8 +112,7 @@ export default {
 		}
 	},
 	mounted() {
-		console.log(this.commits);
-
+		// console.log(this.commits);
 	},
 	methods: {
 		getTopologyPath(commit, parentHash) {
@@ -151,7 +146,7 @@ export default {
 					targetY = endY - this.CONFIG.CIRCLE_R,
 					width = Math.abs(endX - startX),
 					height = Math.abs(endY - startY),
-					r = Math.min(this.CONFIG.CORNER_RADIUS, width / 2, height / 2);
+					r = Math.min(this.CONFIG.CORNER_RADIUS / 1.5, width / 2, height / 2);
 
 				return `
 					M ${fromX} ${fromY}
@@ -166,7 +161,7 @@ export default {
 					fromY = startY + (this.CONFIG.CIRCLE_R * yDir),
 					targetX = endX - (this.CONFIG.CIRCLE_R * xDir),
 					targetY = endY,
-					r = Math.min(this.CONFIG.CORNER_RADIUS, Math.abs(endY - startY) / 2);
+					r = Math.min(this.CONFIG.CORNER_RADIUS / 1.5, Math.abs(endY - startY) / 2);
 
 				return `
 					M ${fromX} ${fromY}
@@ -176,8 +171,6 @@ export default {
 				`;
 			}
 		},
-
-
 		getColor(level) {
 			return this.CONFIG.COLORS[level % this.CONFIG.COLORS.length];
 		},
@@ -198,46 +191,6 @@ export default {
 .graph-container {
 	flex-shrink: 0;
 	border-right: 1px solid #333;
-}
-
-.list-container {
-	flex-grow: 1;
-	min-width: 0;
-}
-
-.commit-row {
-	display: flex;
-	align-items: center;
-	padding: 0 10px;
-	border-bottom: 1px solid #2a2a2a;
-	cursor: pointer;
-	transition: background 0.2s;
-	box-sizing: border-box;
-}
-
-.commit-row:hover {
-	background-color: #2a2d2e;
-}
-
-.commit-subject {
-	flex-grow: 1;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	margin-right: 15px;
-	font-weight: 500;
-}
-
-.commit-meta {
-	display: flex;
-	gap: 15px;
-	font-size: 0.85em;
-	color: #888;
-	flex-shrink: 0;
-}
-
-.hash {
-	color: #569cd6;
 }
 
 .svg {

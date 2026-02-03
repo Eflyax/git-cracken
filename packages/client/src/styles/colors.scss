@@ -1,5 +1,9 @@
-$black: #0d1117;
+$primary: #2a2d2e;
+$secondary: #0C7779;
+$tertiary: #249E94;
+$quaternary: #3BC1A8;
+
 
 html, body {
-	background-color: red !important;
+	background-color: $primary;
 }
