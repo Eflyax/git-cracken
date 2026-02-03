@@ -478,11 +478,11 @@ export default {
 				target = "--root";
 			}
 			const script = `
-                    const fs = require('fs');
-                    const file_path = process.argv[1];
-                    const content = fs.readFileSync(file_path, { encoding: 'utf8' });
-                    fs.writeFileSync(file_path, content.replace(/^pick/, 'edit'));
-                `.replace(/\n\s*/g, " ");
+										const fs = require('fs');
+										const file_path = process.argv[1];
+										const content = fs.readFileSync(file_path, { encoding: 'utf8' });
+										fs.writeFileSync(file_path, content.replace(/^pick/, 'edit'));
+								`.replace(/\n\s*/g, " ");
 
 			// https://stackoverflow.com/questions/49465229/git-interactive-rebase-edit-particular-commit-without-needing-to-use-editor
 			const cmd = `node --eval "${script}"`;

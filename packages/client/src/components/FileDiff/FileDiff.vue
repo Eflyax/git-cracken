@@ -115,10 +115,10 @@ class GlyphMarginWidget {
 		const app = createApp(
 			{
 				template: `
-                    <btn class="p-0.5" @click="onClick">
-                        <icon name="${settings.icons[action]}" class="size-4 pointer-events-none" />
-                    </btn>
-                `,
+										<btn class="p-0.5" @click="onClick">
+												<icon name="${settings.icons[action]}" class="size-4 pointer-events-none" />
+										</btn>
+								`,
 				components: { Btn, Icon },
 				methods: {
 					onClick() {
