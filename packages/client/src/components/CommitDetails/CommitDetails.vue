@@ -234,15 +234,14 @@
 			</template>
 
 			<hr class="my-2" />
-			<recycle-scroller
-				class="grow"
-				:items="files.committed"
-				:item-size="32"
-				key-field="path"
-				v-slot="{ item }"
-			>
-				<FileRow :key="item.path" :file="item" />
-			</recycle-scroller>
+
+			<div v-if="files.committed?.length">
+				<FileRow
+				 	v-for="file in files.committed"
+					:key="file.path"
+					:file="file"
+				/>
+			</div>
 		</div>
 	</div>
 </template>

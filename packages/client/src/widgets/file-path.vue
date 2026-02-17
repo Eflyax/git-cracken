@@ -1,5 +1,5 @@
 <template>
-	<div class="flex overflow-hidden">
+	<div class="file-path">
 		<!-- https://stackoverflow.com/questions/70886734/how-do-i-control-the-order-in-which-flexbox-items-grow-shrink -->
 		<div
 			v-if="parts.length > 2"

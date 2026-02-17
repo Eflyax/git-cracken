@@ -1,7 +1,7 @@
 <template>
 	<div
 		class="file-row"
-		:class="{ active }"
+		:class="{active}"
 		:title="
 			(['R', 'C'].includes(file.status) ? `${file.old_path} -> ` : '') +
 			file.path
@@ -9,9 +9,11 @@
 		@click="selected_file = file"
 	>
 		<div class="status">
-			{{ file.status }}
+			<file-status :status="file.status" />
+			<!-- {{ file.status }} -->
 		</div>
-		<file-path class="grow" :path="file.path" />
+
+		<file-path :path="file.path" />
 
 		<div
 			class="flex w-0 overflow-hidden group-hover:w-auto group-hover:overflow-visible"
@@ -71,12 +73,22 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@use '../../styles/colors.scss';
+
 .file-row {
-	border-bottom: 1px solid #333;
 	display: flex;
+	align-items: center;
+	padding: 0 5px;
+	cursor: pointer;
+	border-bottom: 1px solid colors.$secondary;
+
+	&:hover {
+		background-color: colors.$secondary;
+		color: black;
+	}
 
 	&.active {
-		background-color: lightskyblue;
+		background-color: colors.$secondary;
 		color: black;
 	}
 }
