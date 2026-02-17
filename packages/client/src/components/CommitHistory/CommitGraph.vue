@@ -21,7 +21,7 @@
 					<circle
 						:cx="CONFIG.PADDING_LEFT + commit.level * CONFIG.X_STEP"
 						:cy="CONFIG.PADDING_TOP + commit.index * CONFIG.Y_STEP"
-						:r="CONFIG.CIRCLE_R"
+						:r="getCommitRadius(commit)"
 						:fill="getColor(commit.level)"
 						stroke="#1e1e1e"
 						stroke-width="2"
@@ -106,6 +106,12 @@ export default {
 		// console.log(this.commits);
 	},
 	methods: {
+		getCommitRadius(commit) {
+			const
+				radiusDivider = commit.parents.length > 1 ? 2 : 1;
+
+			return CONFIG.CIRCLE_R / radiusDivider;
+		},
 		getTopologyPath(commit, parentHash) {
 			const
 				parent = this.commitMap.get(parentHash);
@@ -168,7 +174,6 @@ export default {
 	},
 };
 </script>
-
 
 <style scoped>
 .commit-browser {
