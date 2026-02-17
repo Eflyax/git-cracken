@@ -1,5 +1,5 @@
 <template>
-	<div v-if="files !== undefined" class="h-full break-words">
+	<div v-if="files !== undefined">
 		<split-pane
 			v-if="current_commits.length === 1 && commit.hash === 'WORKING_TREE'"
 			:dbl-click-splitter="false"
@@ -20,7 +20,15 @@
 						<div class="flex flex-col h-full">
 							<hr v-if="i > 0" class="mb-2" />
 							<div class="flex items-center gap-1 mb-2">
-								<div class="grow">{{ $_.title(area) }} files</div>
+								<div class="grow">
+									<span v-if="area === 'staged'">
+										Staged files
+									</span>
+									<span v-else>
+										Unstaged files
+									</span>
+								</div>
+
 								<btn
 									v-for="action in area === 'unstaged'
 										? ['discard', 'stage']
@@ -32,6 +40,7 @@
 									<icon :name="$settings.icons[action]" class="size-5" />
 									{{ $_.title(action) }} all
 								</btn>
+
 							</div>
 							<recycle-scroller
 								class="grow"
@@ -292,7 +301,9 @@ export default {
 			return this.current_commits[0];
 		},
 		working_tree_selected() {
-			return _.some(this.current_commits, { hash: "WORKING_TREE" });
+			return _.some(this.current_commits, {
+				hash: "WORKING_TREE"
+			});
 		},
 		can_edit() {
 			if (this.current_operation !== null) {
@@ -304,6 +315,7 @@ export default {
 				if (commit.parents.length > 1) {
 					return false;
 				}
+
 				if (commit.index >= this.current_commits[0].index) {
 					break;
 				}
