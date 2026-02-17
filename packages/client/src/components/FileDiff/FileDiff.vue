@@ -1,6 +1,6 @@
 <template>
 	<div class="file-diff">
-		<div class="flex items-center gap-2 p-2 pr-0">
+		<div class="controls">
 			<template v-if="file !== undefined">
 				<template v-if="['R', 'C'].includes(file.status)">
 					<file-path :path="file.old_path" />
@@ -12,7 +12,7 @@
 			<div class="grow" />
 
 			<template v-if="!binary">
-				<select
+				<!-- <select
 					v-model="language"
 					title="Syntax highlighting language (for current file extension)"
 					@change="onSelectLanguage"
@@ -20,42 +20,45 @@
 					<option v-for="lang in languages" :value="lang">
 						{{ lang }}
 					</option>
-				</select>
+				</select> -->
 
-				<hr class="mx-2" />
+				<n-space>
+					<input
+						v-if="collapse_unchanged_regions"
+						v-model="context_line_count"
+						class="w-12"
+						min="0"
+						title="Number of context lines"
+						type="number"
+					/>
 
-				<input
-					v-if="collapse_unchanged_regions"
-					v-model="context_line_count"
-					class="w-12"
-					min="0"
-					title="Number of context lines"
-					type="number"
-				/>
-				<toggle
-					v-model:active="collapse_unchanged_regions"
-					title="Collapse unchanged regions"
-				>
-					<icon name="mdi-view-day" class="size-6" />
-				</toggle>
-				<toggle v-model:active="side_by_side_view" title="Side-by-side view">
-					<icon name="mdi-format-columns" class="size-6" />
-				</toggle>
-				<toggle
-					v-model:active="whitespace_diff"
-					title="Show leading/trailing whitespace diff"
-				>
-					<icon name="mdi-keyboard-space" class="size-6" />
-				</toggle>
-				<toggle v-model:active="word_wrap" title="Word wrap">
-					<icon name="mdi-wrap" class="size-6" />
-				</toggle>
-				<hr class="ml-2 mr-1" />
+					<toggle
+						v-model:active="collapse_unchanged_regions"
+						title="Collapse unchanged regions"
+					>
+						<icon name="mdi-view-day" class="size-6" />
+					</toggle>
+
+					<toggle v-model:active="side_by_side_view" title="Side-by-side view">
+						<icon name="mdi-format-columns" class="size-6" />
+					</toggle>
+
+					<toggle
+						v-model:active="whitespace_diff"
+						title="Show leading/trailing whitespace diff"
+					>
+						<icon name="mdi-keyboard-space" class="size-6" />
+					</toggle>
+
+					<toggle v-model:active="word_wrap" title="Word wrap">
+						<icon name="mdi-wrap" class="size-6" />
+					</toggle>
+
+					<btn title="Close file" @click="close">
+						<icon name="mdi-close" class="size-6" />
+					</btn>
+				</n-space>
 			</template>
-
-			<btn title="Close file" @click="close">
-				<icon name="mdi-close" class="size-6" />
-			</btn>
 		</div>
 
 		<div class="grow relative">
@@ -99,6 +102,7 @@ import WindowEventMixin from "@/mixins/WindowEventMixin";
 import { isFileBinary } from "@/utils/git";
 import Btn from "@/widgets/btn.vue";
 import Icon from "@/widgets/icon.vue";
+import {NSpace} from 'naive-ui'
 
 // https://github.com/microsoft/vscode/blob/1.88.1/src/vs/editor/browser/widget/diffEditor/features/revertButtonsFeature.ts
 // https://github.com/microsoft/vscode/blob/1.88.1/src/vs/editor/browser/widget/diffEditor/diffEditorWidget.ts#L532
@@ -165,6 +169,9 @@ class GlyphMarginWidget {
 }
 
 export default {
+	components: {
+		NSpace,
+	},
 	mixins: [
 		StoreMixin("context_line_count", 3),
 		StoreMixin("collapse_unchanged_regions", true),
@@ -476,6 +483,12 @@ export default {
 	.monaco-diff-editor {
 		height: 100%;
 		min-height: 500px;
+	}
+
+	.controls {
+		display: flex;
+		justify-content: center;
+		margin-bottom: 5px;
 	}
 }
 </style>

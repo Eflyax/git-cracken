@@ -8,15 +8,16 @@
 		"
 		@click="selected_file = file"
 	>
-		<div class="status">
-			<file-status :status="file.status" />
-			<!-- {{ file.status }} -->
-		</div>
+	 	<file-status
+			:status="file.status"
+		/>
 
-		<file-path :path="file.path" />
+		<file-path
+			:path="file.path"
+		/>
 
 		<div
-			class="flex w-0 overflow-hidden group-hover:w-auto group-hover:overflow-visible"
+			class="file-row-actions"
 		>
 			<btn
 				v-for="action in file.area === 'unstaged'
@@ -28,7 +29,9 @@
 				:title="$_.title(action)"
 				@click="run(action)"
 			>
-				<icon :name="$settings.icons[action]" class="size-5" />
+				<icon
+					:name="$settings.icons[action]"
+				/>
 			</btn>
 		</div>
 	</div>
@@ -36,9 +39,17 @@
 
 <script>
 export default {
-	inject: ["repo", "selected_file", "updateFileStatus", "saveSelectedFile"],
+	inject: [
+		'repo',
+		'selected_file',
+		'updateFileStatus',
+		'saveSelectedFile'
+	],
 	props: {
-		file: { type: Object, required: true },
+		file: {
+			type: Object,
+			required: true
+		}
 	},
 	computed: {
 		active() {
@@ -49,21 +60,24 @@ export default {
 		async run(action) {
 			await this.saveSelectedFile();
 
-			if (action === "stage") {
-				await this.repo.callGit("add", "--", this.file.path);
-			} else if (action === "unstage") {
+			if (action === 'stage') {
+				await this.repo.callGit('add', '--', this.file.path);
+			}
+			else if (action === 'unstage') {
 				await this.repo.callGit(
-					"restore",
-					"--staged",
-					"--",
+					'restore',
+					'--staged',
+					'--',
 					this.file.path,
 					..._.filter([this.file.old_path]),
 				);
-			} else if (action === "discard") {
-				if (this.file.status === "A") {
-					await this.repo.callGit("clean", "--force", "--", this.file.path);
-				} else {
-					await this.repo.callGit("checkout", "--", this.file.path);
+			}
+			else if (action === 'discard') {
+				if (this.file.status === 'A') {
+					await this.repo.callGit('clean', '--force', '--', this.file.path);
+				}
+				else {
+					await this.repo.callGit('checkout', '--', this.file.path);
 				}
 			}
 			await this.updateFileStatus(this.file);
@@ -76,11 +90,11 @@ export default {
 @use '../../styles/colors.scss';
 
 .file-row {
-	display: flex;
 	align-items: center;
-	padding: 0 5px;
 	cursor: pointer;
-	border-bottom: 1px solid colors.$secondary;
+	display: flex;
+	height: 30px;
+	padding: 0 5px;
 
 	&:hover {
 		background-color: colors.$secondary;

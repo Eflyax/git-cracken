@@ -162,19 +162,6 @@ svg {
 
 		.file-row {
 
-			.file-path {
-				display: flex;
-				flex-grow: 1;
-				white-space: nowrap;
-				overflow: hidden;
-				text-overflow: ellipsis;
-				margin-right: 15px;
-				font-weight: 500;
-			}
-
-			.status {
-				color: colors.$secondary;
-			}
 		}
 
 	}

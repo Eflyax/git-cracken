@@ -31,6 +31,9 @@ export default {
 
 <style>
 .file-status {
+	margin-top: 5px;
+	width: 13px;
+
 	.modified {
 		fill: #FFC107;
 	}
