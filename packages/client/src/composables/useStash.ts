@@ -24,8 +24,6 @@ export function useStash(repo) {
 				isStash: true
 			};
 		});
-
-		return stashes.value;
 	};
 
 	return {

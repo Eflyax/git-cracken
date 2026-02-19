@@ -81,11 +81,10 @@ export default {
 	},
 	computed: {
 		references() {
-			const references = this.commit.references.filter(
-				(ref) =>
-					!this.hidden_references.has(ref.id) &&
-					(ref.type !== "head" || this.current_branch_name === null),
-			);
+			const
+				references = this.commit.references.filter(
+					(ref) => !this.hidden_references.has(ref.id) && (ref.type !== "head" || this.current_branch_name === null)
+				).filter(ref => ref.type !== 'stash');
 
 			const branchRefs = references.filter(ref => ref.type === 'local_branch' || ref.type === 'remote_branch');
 			const otherRefs = references.filter(ref => ref.type !== 'local_branch' && ref.type !== 'remote_branch');
@@ -100,17 +99,22 @@ export default {
 			});
 
 			const mergedBranches = Object.values(groupedBranches).map(group => {
-				const local = group.find(ref => ref.type === 'local_branch');
-				const remotes = group.filter(ref => ref.type === 'remote_branch');
+				const
+					local = group.find(ref => ref.type === 'local_branch'),
+					remotes = group.filter(ref => ref.type === 'remote_branch');
 
-				if (!local && remotes.length === 0) return null;
+				if (!local && remotes.length === 0) {
+					return null;
+				}
 
-				const name = local ? local.name : remotes[0].name.split('/').slice(1).join('/');
+				const name = local
+					? local.name
+					: remotes[0].name.split('/').slice(1).join('/');
 
 				return {
 					id: `branch:${name}`,
 					name: name,
-					type: 'branch', // My synthetic type
+					type: 'branch',
 					isLocal: !!local,
 					remotes: remotes.map(r => r.name.split('/')[0]),
 					representativeRef: local || remotes[0],

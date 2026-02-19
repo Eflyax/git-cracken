@@ -39,14 +39,25 @@
 						/>
 					</template>
 
+					<rect
+						v-if="commit.isStash"
+						:x="CONFIG.PADDING_LEFT + commit.level * CONFIG.X_STEP - (CONFIG.CIRCLE_R * 1)"
+						:y="(CONFIG.PADDING_TOP + commit.index * CONFIG.Y_STEP) - rowMarginBottom - (CONFIG.CIRCLE_R * 1)"
+						:width="CONFIG.CIRCLE_R * 2"
+						:height="CONFIG.CIRCLE_R * 2"
+						:stroke="getColor(commit.level)"
+						:stroke-width="CONFIG.LINE_WIDTH"
+						:stroke-dasharray="[2]"
+					/>
 					<circle
+						v-else
 						:cx="CONFIG.PADDING_LEFT + commit.level * CONFIG.X_STEP"
 						:cy="(CONFIG.PADDING_TOP + commit.index * CONFIG.Y_STEP) - rowMarginBottom"
 						:r="getCommitRadius(commit)"
 						:fill="commit.hash === 'WORKING_TREE' ? '' : getColor(commit.level)"
 						:stroke="commit.hash === 'WORKING_TREE' ? getColor(commit.level) : '#1e1e1e'"
 						:stroke-dasharray="commit.hash === 'WORKING_TREE' ? [2] : undefined"
-						stroke-width="2"
+						:stroke-width="CONFIG.LINE_WIDTH"
 					/>
 				</g>
 			</svg>
