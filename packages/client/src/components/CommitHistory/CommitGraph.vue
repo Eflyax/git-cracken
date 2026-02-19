@@ -6,6 +6,25 @@
 				:width="svgDimensions.width"
 				:height="svgDimensions.height"
 			>
+				 <g v-for="commit in commits" :key="commit.hash">
+					<rect
+						:x="CONFIG.PADDING_LEFT + commit.level * CONFIG.X_STEP"
+						:y="commit.index * CONFIG.Y_STEP"
+						:width="svgDimensions.width"
+						:height="CONFIG.Y_STEP - rowMarginBottom"
+						:fill="getColor(commit.level)"
+						:fill-opacity="this.selected_commits.includes(commit.hash) ? '75%' : '10%'"
+					/>
+
+					<rect
+						:x="svgDimensions.width - 2"
+						:y="commit.index * CONFIG.Y_STEP  "
+						:width="2"
+						:height="CONFIG.Y_STEP - rowMarginBottom"
+						:fill="getColor(commit.level)"
+					/>
+				</g>
+
 				<g v-for="commit in commits" :key="commit.hash">
 					<template v-for="parentHash in commit.parents" :key="parentHash">
 						<path
@@ -14,32 +33,13 @@
 							:stroke="getColor(commit.level)"
 							:stroke-width="CONFIG.LINE_WIDTH"
 							fill="none"
-							opacity="0.7"
-						/>
-					</template>
-
-					<template v-if="this.selected_commits.includes(commit.hash)">
-						<rect
-							:x="CONFIG.PADDING_LEFT + commit.level * CONFIG.X_STEP - (getCommitRadius(commit) / 2)"
-							:y="CONFIG.PADDING_TOP + commit.index * CONFIG.Y_STEP  - (getCommitRadius(commit))"
-							:width="svgDimensions.width"
-							:height="CONFIG.CIRCLE_R * 2"
-							:fill="getColor(commit.level)"
-							fill-opacity="50%"
-						/>
-
-						<rect
-							:x="svgDimensions.width - 2"
-							:y="CONFIG.PADDING_TOP + commit.index * CONFIG.Y_STEP  - getCommitRadius(commit) - 3"
-							:width="2"
-							:height="CONFIG.Y_STEP - 3"
-							:fill="getColor(commit.level)"
+							opacity="0.9"
 						/>
 					</template>
 
 					<circle
 						:cx="CONFIG.PADDING_LEFT + commit.level * CONFIG.X_STEP"
-						:cy="CONFIG.PADDING_TOP + commit.index * CONFIG.Y_STEP"
+						:cy="(CONFIG.PADDING_TOP + commit.index * CONFIG.Y_STEP) - rowMarginBottom"
 						:r="getCommitRadius(commit)"
 						:fill="getColor(commit.level)"
 						stroke="#1e1e1e"
@@ -81,7 +81,8 @@ export default {
 	},
 	data() {
 		return {
-			CONFIG
+			CONFIG,
+			rowMarginBottom: 5 / 1
 		}
 	},
 	computed: {
@@ -123,9 +124,9 @@ export default {
 
 			const
 				startX = CONFIG.PADDING_LEFT + commit.level * CONFIG.X_STEP,
-				startY = CONFIG.PADDING_TOP + commit.index * CONFIG.Y_STEP,
+				startY = CONFIG.PADDING_TOP + commit.index * CONFIG.Y_STEP - this.rowMarginBottom,
 				endX = CONFIG.PADDING_LEFT + parent.level * CONFIG.X_STEP,
-				endY = CONFIG.PADDING_TOP + parent.index * CONFIG.Y_STEP;
+				endY = CONFIG.PADDING_TOP + parent.index * CONFIG.Y_STEP - this.rowMarginBottom;
 
 			if (commit.level === parent.level) {
 				return `M ${startX} ${startY + CONFIG.CIRCLE_R} L ${endX} ${endY - CONFIG.CIRCLE_R}`;

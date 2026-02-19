@@ -54,9 +54,9 @@
 						<icon name="mdi-wrap" class="size-6" />
 					</toggle>
 
-					<btn title="Close file" @click="close">
+					<n-button title="Close file" @click="close" type="error">
 						<icon name="mdi-close" class="size-6" />
-					</btn>
+					</n-button>
 				</n-space>
 			</template>
 		</div>
@@ -102,7 +102,7 @@ import WindowEventMixin from "@/mixins/WindowEventMixin";
 import { isFileBinary } from "@/utils/git";
 import Btn from "@/widgets/btn.vue";
 import Icon from "@/widgets/icon.vue";
-import {NSpace} from 'naive-ui'
+import {NSpace, NButton} from 'naive-ui'
 
 // https://github.com/microsoft/vscode/blob/1.88.1/src/vs/editor/browser/widget/diffEditor/features/revertButtonsFeature.ts
 // https://github.com/microsoft/vscode/blob/1.88.1/src/vs/editor/browser/widget/diffEditor/diffEditorWidget.ts#L532
@@ -170,7 +170,8 @@ class GlyphMarginWidget {
 
 export default {
 	components: {
-		NSpace,
+		NButton,
+		NSpace
 	},
 	mixins: [
 		StoreMixin("context_line_count", 3),
