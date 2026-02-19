@@ -3,7 +3,7 @@
 		v-if="files !== undefined"
 		class="commit-details"
 	>
-		<split-pane
+		<div
 			v-if="current_commits.length === 1 && commit.hash === 'WORKING_TREE'"
 			:dbl-click-splitter="false"
 			horizontal
@@ -19,8 +19,7 @@
 						v-for="(area, i) in ['unstaged', 'staged']"
 						:size="area === 'unstaged' ? unstaged_pane_size : undefined"
 					>
-						<div class="commit-details-header">
-
+						<div class="area">
 							<template v-if="area === 'unstaged'">
 								<n-button
 
@@ -38,7 +37,7 @@
 								<br>
 							</template>
 
-							<hr v-if="i > 0" class="mb-2" />
+							<!-- <hr v-if="i > 0" class="mb-2" /> -->
 
 							<div class="actions">
 								<div class="area-title">
@@ -85,7 +84,10 @@
 				</split-pane>
 			</pane>
 
-			<pane :size="commit_pane_size" class="min-h-24 flex flex-col gap-2">
+				<!-- :size="commit_pane_size" -->
+			<div
+				class="commit-actions"
+			>
 				<div v-if="current_operation?.conflict">
 					Conflict:
 				</div>
@@ -147,8 +149,8 @@
 						Abort
 					</btn>
 				</div>
-			</pane>
-		</split-pane>
+			</div>
+		</div>
 
 		<div v-else class="flex flex-col h-full">
 			<div class="flex justify-end gap-1 flex-wrap mb-4">

@@ -19,7 +19,10 @@
 					<span class="label">
 						{{ action.label }}
 					</span>
-					<icon class="icon" :name="action.icon" />
+					<icon
+						class="icon"
+						:name="action.icon"
+					/>
 				</div>
 			</div>
 		</template>
@@ -73,13 +76,23 @@ export default {
 					? []
 					: [
 							{
-								icon: "mdi-arrow-down-bold-circle-outline",
+								icon: 'mdi-arrow-u-left-top',
+								label: "Undo",
+								disabled: true
+							},
+							{
+								icon: 'mdi-arrow-u-right-top',
+								label: "Redo",
+								disabled: true
+							},
+							{
+								icon: "mdi-arrow-down-bold",
 								label: "Pull",
 								disabled: true
 								// callback: () => (this.show_branch_modal = true),
 							},
 							{
-								icon: "mdi-arrow-up-bold-circle-outline",
+								icon: "mdi-arrow-up-bold",
 								label: "Push",
 								disabled: true
 								// callback: () => (this.show_branch_modal = true),

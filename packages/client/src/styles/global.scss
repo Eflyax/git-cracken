@@ -27,10 +27,12 @@ svg {
 	padding: 5px;
 
 	.splitpanes--vertical > .splitpanes__splitter {
-		min-width: 5px;
-		cursor: col-resize;
-		background-color: colors.$secondary;
-		margin: 5px;
+		/*
+			min-width: 5px;
+			cursor: col-resize;
+			background-color: colors.$secondary;
+			margin: 5px;
+		*/
 	}
 
 	.splitpanes {
@@ -288,15 +290,21 @@ svg {
 		}
 
 		.commit-details {
-			.commit-details-header {
-				.actions {
-					margin-bottom: 5px;
+			border: 5px solid red;
+			position: relative;
+			height: 90%;
+			display: flex;
+			flex-direction: column;
 
-					.area-title {
-						display: flex;
-						justify-content: space-between;
-					}
-				}
+			.area {
+				border: 5px solid aqua;
+				flex: 1;
+
+			}
+
+			.commit-actions {
+				height: 220px;
+				border: 5px solid blue;
 			}
 		}
 	}
