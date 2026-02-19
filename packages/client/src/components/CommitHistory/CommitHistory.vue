@@ -79,7 +79,6 @@
 						/>
 					</div>
 
-
 					 <!-- <recycle-scroller
 						v-if="commits !== undefined"
 						ref="references_scroller"
@@ -142,9 +141,10 @@ import CommitRow from "./CommitRow.vue";
 import SettingsModal from "./SettingsModal.vue";
 import {Splitpanes, Pane} from 'splitpanes';
 import {CONFIG} from '@/settings';
-
+import {useStash} from "@/composables/useStash";
 const field_separator = "\x06";
 const commit_limit_multiplier = 4;
+import {inject} from 'vue';
 
 export default {
 	mixins: [
@@ -182,6 +182,16 @@ export default {
 		"setSelectedReference",
 		"setSelectedCommits",
 	],
+	setup() {
+		const
+			repo = inject('repo'),
+			{getStashes, stashes} = useStash(repo.value);
+
+		return {
+			getStashes,
+			stashes
+		};
+	},
 	data: () => ({
 		displaySearch: false,
 		current_commit_limit: undefined,
@@ -241,7 +251,7 @@ export default {
 	},
 	methods: {
 		async load() {
-			await Promise.all([this.loadHistory(), this.loadStatus()]);
+			await Promise.all([this.loadHistory(), this.loadStatus(), this.getStashes()]);
 		},
 		async loadHistory({ skip_references = false, limit } = {}) {
 			if (!skip_references) {

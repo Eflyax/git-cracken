@@ -190,9 +190,6 @@ export default {
 			// 	return;
 			// }
 			// await this.repo.callGit("checkout", refToCheck.name);
-
-			//
-			//
 			//
 			await this.repo.callGit('fetch', 'origin');
 			await this.repo.callGit('checkout', refToCheck.name);
