@@ -8,83 +8,71 @@
 			:dbl-click-splitter="false"
 			horizontal
 			@resized="commit_pane_size = $event[1].size"
+			class="commit-area"
 		>
-			<pane class="min-h-40">
-				<split-pane
-					:dbl-click-splitter="false"
-					horizontal
-					@resized="unstaged_pane_size = $event[0].size"
-				>
-					<pane
-						v-for="(area, i) in ['unstaged', 'staged']"
-						:size="area === 'unstaged' ? unstaged_pane_size : undefined"
-					>
-						<div class="area">
-							<template v-if="area === 'unstaged'">
-								<n-button
-
-									type="error"
-									:disabled="files[area].length === 0"
-									@click="run('discard')"
-								>
-									<template #icon>
-										<icon
-											:name="$settings.icons.discard"
-										/>
-									</template>
-								</n-button>
-								<br>
-								<br>
+			<div
+				v-for="(area, i) in ['unstaged', 'staged']"
+				:size="area === 'unstaged' ? unstaged_pane_size : undefined"
+				class="area"
+			>
+					<template v-if="area === 'unstaged'">
+						<n-button
+							type="error"
+							:disabled="files[area].length === 0"
+							@click="run('discard')"
+						>
+							<template #icon>
+								<icon
+									:name="$settings.icons.discard"
+								/>
 							</template>
+						</n-button>
+						<br>
+						<br>
+					</template>
 
-							<!-- <hr v-if="i > 0" class="mb-2" /> -->
+					<div class="actions">
+						<div class="area-title">
+							<template v-if="area === 'unstaged'">
+								<span>Unstaged files</span>
 
-							<div class="actions">
-								<div class="area-title">
-									<template v-if="area === 'unstaged'">
-										<span>Unstaged files</span>
+								<n-button
+									v-if="files[area].length"
+									type="success"
+									size="tiny"
+									secondary
+									@click="run('stage')"
+								>
+									Stage all changes
+								</n-button>
+							</template>
+							<template v-else>
+								<span>Staged files</span>
 
-										<n-button
-											type="success"
-											size="tiny"
-											secondary
-											:disabled="files[area].length === 0"
-											@click="run('stage')"
-										>
-											Stage all changes
-										</n-button>
-									</template>
-									<template v-else>
-										<span>Staged files</span>
-
-										 <n-button
-											type="error"
-											size="tiny"
-											secondary
-											:disabled="files[area].length === 0"
-											@click="run('unstage')"
-										>
-											Unstage all changes
-										</n-button>
-									</template>
-								</div>
-							</div>
-
-							<recycle-scroller
-								class="grow"
-								:items="files[area]"
-								:item-size="36"
-								key-field="path"
-								v-slot="{ item }"
-							>
-								<FileRow :key="item.path" :file="item" />
-							</recycle-scroller>
+								 <n-button
+									v-if="files[area].length"
+									type="error"
+									size="tiny"
+									secondary
+									@click="run('unstage')"
+								>
+									Unstage all changes
+								</n-button>
+							</template>
 						</div>
-					</pane>
-				</split-pane>
-			</pane>
+					</div>
 
-				<!-- :size="commit_pane_size" -->
+					<recycle-scroller
+						class="grow"
+						:items="files[area]"
+						:item-size="36"
+						key-field="path"
+						v-slot="{ item }"
+					>
+						<FileRow :key="item.path" :file="item" />
+					</recycle-scroller>
+			</div>
+
 			<div
 				class="commit-actions"
 			>
@@ -100,22 +88,24 @@
 						<input v-model="skip_hooks" type="checkbox" />
 						Skip hooks
 					</label>
-					<btn
-						:disabled="message === '' || (files.staged.length === 0 && !amend)"
-						@click="doCommit"
-					>
-						<icon name="mdi-source-commit" class="size-5" />
-						Commit
-					</btn>
 				</div>
 
-				<textarea
-					v-model.trim="message"
+				<n-input
+					v-model:value="message"
 					class="grow px-2 resize-none"
-					:disabled="current_operation?.conflict"
 					placeholder="Commit message"
+					:disabled="current_operation?.conflict"
 					:spellcheck="false"
 				/>
+
+				<n-button
+					:disabled="message === '' || (files.staged.length === 0 && !amend)"
+					@click="doCommit"
+					type="success"
+				>
+					<icon name="mdi-source-commit" class="size-5" />
+					Commit
+				</n-button>
 
 				<div v-if="current_operation !== null" class="flex items-center gap-1">
 					<div>{{ current_operation.label }}...</div>
@@ -151,7 +141,6 @@
 				</div>
 			</div>
 		</div>
-
 		<div v-else class="flex flex-col h-full">
 			<div class="flex justify-end gap-1 flex-wrap mb-4">
 				<div v-if="current_operation?.conflict" class="text-gray italic">
@@ -296,7 +285,7 @@ import BranchModal from "./BranchModal.vue";
 import CommitterDetails from "./CommitterDetails.vue";
 import FileRow from "./FileRow.vue";
 import TagModal from "./TagModal.vue";
-import {NButton} from 'naive-ui';
+import {NButton, NInput} from 'naive-ui';
 
 export default {
 	mixins: [
@@ -308,6 +297,7 @@ export default {
 		CommitterDetails,
 		FileRow,
 		NButton,
+		NInput,
 		TagModal
 	},
 	inject: [
