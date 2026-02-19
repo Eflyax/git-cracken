@@ -1,35 +1,38 @@
 <template>
 	<div class="action-bar">
-		<div v-if="current_operation?.conflict" class="text-gray italic">
-			Functionality limited during conflict
-		</div>
+		<!-- <div v-if="current_operation?.conflict" class="text-gray italic">
+			 Functionality limited during conflict
+		</div>  -->
 
 		<template v-for="action in actions">
-			<n-button
-				strong
+			<div
 				type="info"
 				:click_twice="action.click_twice ? 'text-accent' : false"
-				:disabled="action.disabled"
 				:title="action.title"
 				@click="action.callback"
-				:class="action.class"
+				:class="[
+					'action',
+						action.disabled ? 'disabled' : ''
+				]"
 			>
-				<template #icon>
-					<icon :name="action.icon" class="size-6" />
-				</template>
-				 <!-- {{ action.label }} -->
-			</n-button>
+				<div class="action-content">
+					<span class="label">
+						{{ action.label }}
+					</span>
+					<icon class="icon" :name="action.icon" />
+				</div>
+			</div>
 		</template>
 
-		<BranchModal v-if="show_branch_modal" @close="show_branch_modal = false" />
 	</div>
+	 <BranchModal v-if="show_branch_modal" @close="show_branch_modal = false" />
 </template>
 
 <script>
-import WindowEventMixin from "@/mixins/WindowEventMixin";
-import { restoreWip } from "@/utils/actions";
-import BranchModal from "./BranchModal.vue";
+import WindowEventMixin from '@/mixins/WindowEventMixin';
+import BranchModal from './BranchModal.vue';
 import {NButton} from 'naive-ui';
+// import { restoreWip } from "@/utils/actions";
 
 export default {
 	components: {
@@ -70,6 +73,18 @@ export default {
 					? []
 					: [
 							{
+								icon: "mdi-arrow-down-bold-circle-outline",
+								label: "Pull",
+								disabled: true
+								// callback: () => (this.show_branch_modal = true),
+							},
+							{
+								icon: "mdi-arrow-up-bold-circle-outline",
+								label: "Push",
+								disabled: true
+								// callback: () => (this.show_branch_modal = true),
+							},
+							{
 								icon: "mdi-source-branch",
 								label: "Branch",
 								callback: () => (this.show_branch_modal = true),
@@ -88,7 +103,7 @@ export default {
 							// },
 							{
 								icon: "mdi-archive-arrow-up-outline",
-								label: "Pop stahs",
+								label: 'Pop',
 								title:
 									this.last_wip_branch === undefined
 										? ""
@@ -127,7 +142,7 @@ export default {
 				// },
 				{
 					icon: "mdi-console",
-					label: "Open terminal",
+					label: "Terminal",
 					title: "(Alt+T)",
 					class: 'open-console',
 					callback: this.repo.openTerminal,

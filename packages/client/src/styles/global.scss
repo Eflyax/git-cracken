@@ -66,11 +66,10 @@ svg {
 				.content-toolbar {
 					display: flex;
 					align-items: center;
-					padding: 10px;
 					background-color: #202327;
 					margin-bottom: 5px;
-					min-height: 30px;
-					height: 20px;
+					height: 40px;
+					padding-bottom: 5px;
 
 					.meta {
 						flex: 1 1 0;
@@ -79,12 +78,75 @@ svg {
 
 					.controls {
 						flex: 0 0 600px;
-						padding: 10px;
 
 						.action-bar {
 							justify-content: center;
 							display: flex;
 							gap: 5px;
+
+							.action {
+								padding: 2px;
+								cursor: pointer;
+								height: 40px;
+								width: 45px;
+								overflow: hidden;
+								font-size: 10px;
+								text-align: center;
+								border-radius: 5px;
+
+								&:hover {
+									background-color: #161819;
+								}
+
+								&.disabled {
+									cursor: default;
+									color: #555;
+
+									.icon {
+										fill: #555;
+									}
+
+									&:hover {
+										background-color: transparent; // nebo barva, kterou má tlačítko v základu
+									}
+								}
+
+/*
+								&:hover {
+									background-color: #161819;
+								}
+
+								&.disabled {
+									cursor: default;
+									color: dimgray;
+
+									.icon {
+										fill: dimgray;
+									}
+								} */
+
+								.action-content {
+									display: flex;
+									flex-direction: column;
+									gap: 2px;
+								}
+
+								/* display: flex; */
+								/* height: 30px; */
+
+								/* flex-direction: column; */
+								/* align-items: center; */
+								/* gap: 5px; */
+
+								.label {
+									/* border: 2px solid lime; */
+								}
+
+								.icon {
+								fill: #cecece;
+									/* border: 2px solid blue; */
+								}
+							}
 
 							.open-console {
 								margin-left: 10px;

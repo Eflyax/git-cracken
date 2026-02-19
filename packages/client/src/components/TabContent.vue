@@ -17,12 +17,12 @@
 			</btn>
 		</div>
 		<template v-else>
-			 <!-- <ActionBar /> -->
 			<div class="main-content">
 				<div class="content-toolbar">
 					<div class="meta">
 						<span>
-							  {{ repoPath?.split('/').pop() }}
+							<icon name="mdi-folder-open-outline" />
+							{{ repoPath?.split('/').pop() }}
 						</span>
 
 						<span>
