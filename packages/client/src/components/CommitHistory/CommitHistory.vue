@@ -362,6 +362,35 @@ export default {
 			}
 
 			const
+				mappedStashes = Object.values(this.stashes)
+					.sort((a, b) => {
+						const
+							idA = parseInt(a.id.match(/\{(\d+)\}/)[1], 10),
+							idB = parseInt(b.id.match(/\{(\d+)\}/)[1], 10);
+
+						return idA - idB;
+					})
+					.map(stash => {
+						const stash_id = stash.id.replace(/"/g, '');
+
+						return {
+							hash: stash.hash,
+							parents: stash.parentHash || '',
+							subject: stash.message.split(':').slice(1).join(':').slice(0, -1),
+							body: '',
+							author_name: 'Stash',
+							committer_name: 'Stash',
+							author_date: '',
+							committer_date: '',
+							isStash: true,
+							references: [{
+								type: 'stash',
+								name: stash_id,
+								id: stash_id,
+								hash: stash.hash
+							}]
+						};
+					}),
 				log = await this.repo.callGit(
 					'log',
 					..._.map(excluded_references, (id) => `--exclude=${id}`),
@@ -376,8 +405,10 @@ export default {
 					hash: 'WORKING_TREE',
 					parents: this.current_head
 				},
+				...mappedStashes,
 				...log
 					.split('\0')
+					.filter(Boolean)
 					.map((row) =>
 						Object.fromEntries(
 							_.zip(Object.keys(format), row.split(field_separator)),
@@ -391,8 +422,12 @@ export default {
 
 			for (const [i, commit] of commits.entries()) {
 				commit.index = i;
-				commit.hash_abbr = commit.hash.slice(0, settings.hash_abbr_length);
-				commit.references = this.references_by_hash[commit.hash] ?? [];
+				commit.hash_abbr = commit.hash.slice(0, 7);
+
+				if (!commit.isStash) {
+					commit.references = this.references_by_hash[commit.hash] ?? [];
+				}
+
 				commit.parents = commit.parents ? commit.parents.split(' ') : [];
 
 				for (const parent_hash of commit.parents) {
@@ -439,7 +474,7 @@ export default {
 						running_commits.delete(child);
 					}
 				}
-				commit.running_commits = [...running_commits];
+				// commit.running_commits = [...running_commits];
 			}
 
 			if (this.commits === undefined) {
@@ -461,6 +496,14 @@ export default {
 			if (this.search_index !== null) {
 				await this.search();
 			}
+
+
+			// ukázka
+			// this.commits
+			// [{"hash":"WORKING_TREE","parents":["2da3aa005562f0c2e605cd06fa2d9038a6a09738"],"index":0,"hash_abbr":"WORKING","references":[],"level":0},{"hash":"2da3aa005562f0c2e605cd06fa2d9038a6a09738","parents":["61c83089fcce984a312634033323a41afc0e9e8c"],"subject":"Ignore builded files","body":"","author_email":"jakuba.zaruba@orgis.cz","author_name":"Jakub Záruba","author_date":"2025-05-12 07:45","committer_email":"jakuba.zaruba@orgis.cz","committer_name":"Jakub Záruba","committer_date":"2025-05-12 07:45","index":1,"hash_abbr":"2da3aa0","references":[{"type":"local_branch","name":"master","id":"refs/heads/master","date":"2025-05-12T07:45:01+02:00","hash":"2da3aa005562f0c2e605cd06fa2d9038a6a09738"},{"type":"remote_branch","name":"origin/master","id":"refs/remotes/origin/master","date":"2025-05-12T07:45:01+02:00","hash":"2da3aa005562f0c2e605cd06fa2d9038a6a09738"},{"type":"head","name":"HEAD","id":"HEAD","hash":"2da3aa005562f0c2e605cd06fa2d9038a6a09738"}],"level":0},{"hash":"61c83089fcce984a312634033323a41afc0e9e8c","parents":["0a6942f36975f9364ade521a2c1b3a426e103e6b","0a0bb31a24512b7534db8dca88f3e32ec158fad6"],"subject":"Merge pull request #21 from Eflyax/feature/zed-ide-formatter","body":"Feature/zed ide formatter","author_email":"eflyax42@gmail.com","author_name":"Jakub Záruba","author_date":"2025-05-10 21:09","committer_email":"noreply@github.com","committer_name":"GitHub","committer_date":"2025-05-10 21:09","index":2,"hash_abbr":"61c8308","references":[],"level":0}]
+
+			// stashes
+			// {"\"stash@{0}":{"id":"\"stash@{0}","hash":"970f204cb85ba470f6e88fc1d3cf81968402de1f","parentHash":"1dd11637337c29ae0fc31887d6f071da5d38d1a5","message":"On develop: WIP on develop\"","isStash":true}}
 		},
 		async loadStatus() {
 			let operation = null;
