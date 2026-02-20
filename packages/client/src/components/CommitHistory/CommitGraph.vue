@@ -117,7 +117,6 @@ export default {
 	},
 	data() {
 		return {
-			// archiveOutline,
 			commitsToRender: [],
 			CONFIG,
 			rowMarginBottom: 5 / 1

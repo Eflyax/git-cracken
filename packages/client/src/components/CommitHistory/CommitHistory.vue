@@ -416,7 +416,7 @@ export default {
 					),
 				],
 				occupied_levels = {},
-				running_commits = new Set(),
+				// running_commits = new Set(),
 				remaining_parents = {},
 				children = {};
 
@@ -461,7 +461,7 @@ export default {
 
 				if (commit.parents.length > 0) {
 					occupied_levels[commit.level] = commit;
-					running_commits.add(commit);
+					// running_commits.add(commit);
 				}
 
 				for (const child of children[commit.hash] ?? []) {
@@ -471,7 +471,7 @@ export default {
 						if (child.level !== commit.level) {
 							delete occupied_levels[child.level];
 						}
-						running_commits.delete(child);
+						// running_commits.delete(child);
 					}
 				}
 				// commit.running_commits = [...running_commits];
@@ -487,7 +487,7 @@ export default {
 			if (
 				!_.every(
 					this.selected_commits,
-					(hash) => _.find(this.commits, { hash }) !== undefined,
+					(hash) => _.find(this.commits, {hash}) !== undefined,
 				)
 			) {
 				this.setSelectedCommits([]);
@@ -496,14 +496,6 @@ export default {
 			if (this.search_index !== null) {
 				await this.search();
 			}
-
-
-			// ukázka
-			// this.commits
-			// [{"hash":"WORKING_TREE","parents":["2da3aa005562f0c2e605cd06fa2d9038a6a09738"],"index":0,"hash_abbr":"WORKING","references":[],"level":0},{"hash":"2da3aa005562f0c2e605cd06fa2d9038a6a09738","parents":["61c83089fcce984a312634033323a41afc0e9e8c"],"subject":"Ignore builded files","body":"","author_email":"jakuba.zaruba@orgis.cz","author_name":"Jakub Záruba","author_date":"2025-05-12 07:45","committer_email":"jakuba.zaruba@orgis.cz","committer_name":"Jakub Záruba","committer_date":"2025-05-12 07:45","index":1,"hash_abbr":"2da3aa0","references":[{"type":"local_branch","name":"master","id":"refs/heads/master","date":"2025-05-12T07:45:01+02:00","hash":"2da3aa005562f0c2e605cd06fa2d9038a6a09738"},{"type":"remote_branch","name":"origin/master","id":"refs/remotes/origin/master","date":"2025-05-12T07:45:01+02:00","hash":"2da3aa005562f0c2e605cd06fa2d9038a6a09738"},{"type":"head","name":"HEAD","id":"HEAD","hash":"2da3aa005562f0c2e605cd06fa2d9038a6a09738"}],"level":0},{"hash":"61c83089fcce984a312634033323a41afc0e9e8c","parents":["0a6942f36975f9364ade521a2c1b3a426e103e6b","0a0bb31a24512b7534db8dca88f3e32ec158fad6"],"subject":"Merge pull request #21 from Eflyax/feature/zed-ide-formatter","body":"Feature/zed ide formatter","author_email":"eflyax42@gmail.com","author_name":"Jakub Záruba","author_date":"2025-05-10 21:09","committer_email":"noreply@github.com","committer_name":"GitHub","committer_date":"2025-05-10 21:09","index":2,"hash_abbr":"61c8308","references":[],"level":0}]
-
-			// stashes
-			// {"\"stash@{0}":{"id":"\"stash@{0}","hash":"970f204cb85ba470f6e88fc1d3cf81968402de1f","parentHash":"1dd11637337c29ae0fc31887d6f071da5d38d1a5","message":"On develop: WIP on develop\"","isStash":true}}
 		},
 		async loadStatus() {
 			let operation = null;
