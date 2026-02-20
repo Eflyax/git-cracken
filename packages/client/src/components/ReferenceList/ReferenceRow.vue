@@ -6,16 +6,18 @@
 			hidden || commit === undefined ? {} : setSelectedCommits([reference.hash])
 		"
 	>
-		<btn
+		<n-button
 			:title="(hidden ? 'Show' : 'Hide')"
 			@click="toggleVisibility"
 			size="tiny"
+			strong
+			secondary
 		>
 			<icon
 				:name="hidden ? 'mdi-eye-outline' : 'mdi-eye-off-outline'"
 				class="size-4"
 			/>
-		</btn>
+		</n-button>
 
 		<div class="grow ellipsis" :title>
 			{{ reference.name }}
@@ -24,6 +26,8 @@
 </template>
 
 <script>
+import {NButton} from 'naive-ui';
+
 export default {
 	inject: [
 		'selected_reference',
@@ -33,6 +37,9 @@ export default {
 		'setSelectedCommits',
 		'refreshHistory',
 	],
+	components: {
+		NButton
+	},
 	props: {
 		reference: {
 			type: Object,

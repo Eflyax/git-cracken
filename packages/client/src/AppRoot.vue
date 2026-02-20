@@ -1,5 +1,5 @@
 <template>
-	<n-config-provider>
+	<n-config-provider :theme="darkTheme">
 		<div class="app-root">
 
 			<div class="repos">
@@ -17,9 +17,14 @@
 												</div>
 										</template>
 								</draggable> -->
-				<btn title="Add tab" @click="addTab">
-					<icon name="mdi-plus" class="size-6" />
-				</btn>
+				<n-button
+					title="Add tab"
+					type="default"
+					class="open-repo"
+					@click="addTab"
+				>
+					<icon name="mdi-plus" />
+				</n-button>
 			</div>
 
 			<div class="tab-wrapper">
@@ -41,10 +46,11 @@ import WindowEventMixin from '@/mixins/WindowEventMixin';
 import TabContent from './components/TabContent.vue';
 import {WebSocketClient} from './utils/websocket';
 import {electronMock} from './electronMock';
-import {NConfigProvider, NInput, NDatePicker, NSpace} from 'naive-ui';
+import {darkTheme, NButton, NConfigProvider, NInput, NDatePicker, NSpace} from 'naive-ui';
 
 export default {
 	components: {
+		NButton,
 		TabContent,
 		NConfigProvider,
 		NInput,
@@ -58,6 +64,12 @@ export default {
 		return {
 			websocket: this.websocket,
 		};
+	},
+	setup() {
+
+		return {
+			darkTheme
+		}
 	},
 	data: () => ({
 		tabs: [],

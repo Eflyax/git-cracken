@@ -20,12 +20,12 @@
 			<div class="main-content">
 				<div class="content-toolbar">
 					<div class="meta">
-						<span>
+						<span class="repository-name">
 							<icon name="mdi-folder-open-outline" />
 							{{ repoPath?.split('/').pop() }}
 						</span>
 
-						<span>
+						<span class="current-branch-name">
 							<icon name="mdi-source-branch" />
 							{{ current_branch_name }}
 						</span>
@@ -41,7 +41,7 @@
 				<splitpanes style="height: 500px;" >
 					<pane
 						class="left"
-						size="20"
+						size="12"
 					>
 						<ReferenceList />
 					</pane>

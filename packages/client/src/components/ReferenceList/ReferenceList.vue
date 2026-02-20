@@ -18,9 +18,11 @@
 
 				<div class="header">
 					<icon :name="$settings.icons[type]" />
-					{{ $_.pluralize($_.title(type)) }}
-					<div>
-						({{ references_by_type[type]?.length ?? 0 }})
+					<span class="title">
+						{{ titleByType(type) }}
+					</span>
+					<div class="count">
+						{{ references_by_type[type]?.length ?? 0 }}
 					</div>
 				</div>
 
@@ -63,5 +65,17 @@ export default {
 			return _.without(settings.referenceTypeOrder, "head");
 		},
 	},
-};
+	methods: {
+		titleByType(type) {
+			switch (type){
+				case 'local_branch':
+					return 'local';
+				case 'remote_branch':
+					return 'remote';
+				case 'tag':
+					return 'tags';
+			}
+		}
+	}
+}
 </script>

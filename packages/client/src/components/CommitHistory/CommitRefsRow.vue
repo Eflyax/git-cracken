@@ -147,9 +147,7 @@ export default {
 			return CONFIG.COLORS[level % CONFIG.COLORS.length];
 		},
 		printInfo(reference) {
-			// console.log(this.commit);
 			console.log(reference);
-
 		},
 		getTitle(reference) {
 			if (reference.type === 'branch') {

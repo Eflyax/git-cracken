@@ -79,7 +79,7 @@
 				<div v-if="current_operation?.conflict">
 					Conflict:
 				</div>
-				<div v-else class="flex items-center gap-3 justify-end">
+				<div v-else class="options">
 					<label>
 						<input v-model="amend" type="checkbox" />
 						Amend
@@ -102,6 +102,7 @@
 					:disabled="message === '' || (files.staged.length === 0 && !amend)"
 					@click="doCommit"
 					type="success"
+					class="commit"
 				>
 					<icon name="mdi-source-commit" class="size-5" />
 					Commit
