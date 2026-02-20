@@ -55,6 +55,7 @@
 						<CommitHistory
 							v-else
 							ref="commit_history"
+							:key="commitHistoryKey"
 						/>
 					</pane>
 					<pane
@@ -181,7 +182,8 @@ export default {
 				working_tree_files: undefined,
 				selected_file: null,
 				save_semaphore: Promise.resolve(),
-				repoPath: undefined
+				repoPath: undefined,
+				commitHistoryKey: 0
 			}),
 			computed: {
 				tab_active() {
@@ -375,6 +377,11 @@ export default {
 		this.repoPath = await this.openRepo();
 
 		// todo
+		this.$emitter.on(ESystemEvents.RerenderCommitHistory, () => {
+			this.commitHistoryKey++;
+			console.log('Commit history rerendered', this.commitHistoryKey);
+		});
+
 		this.$emitter.on(ESystemEvents.OpenContextMenuCommit , (argument) => {
 			const
 				{e, commit} = argument,
@@ -386,6 +393,9 @@ export default {
 						await this.repo.callGit('stash', action, stashId);
 						await this.refreshHistory();
 						await this.refreshStatus();
+
+						// todo - on success delete commit stash?
+						this.$emitter.emit(ESystemEvents.RerenderCommitHistory);
 					}
 
 				items.push({

@@ -278,12 +278,11 @@ svg {
 					display: inline-flex;
 					text-overflow: ellipsis;
 					opacity: 0.5;
+					margin-top: -7px;
 
 					&.active {
 						opacity: 1;
-						border: 1px solid #FFF;
 					}
-
 				}
 			}
 		}

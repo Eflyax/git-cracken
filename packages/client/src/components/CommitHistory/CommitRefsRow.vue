@@ -11,7 +11,7 @@
 			@dblclick="checkoutBranch(reference)"
 			@click="setSelectedCommits([commit.hash])"
 			:style="{
-				backgroundColor: getColor(commit.level),
+				backgroundColor: getColor(commit.level)
 			}"
 			:class="[
 				'tag',

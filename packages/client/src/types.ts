@@ -8,5 +8,6 @@ export enum ECommitHashes {
 }
 
 export enum ESystemEvents {
-	OpenContextMenuCommit = 'open-context-menu'
+	OpenContextMenuCommit = 'open-context-menu',
+	RerenderCommitHistory = 'rerender-commit-history' // temporary hack
 }
