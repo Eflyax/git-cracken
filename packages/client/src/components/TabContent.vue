@@ -131,16 +131,18 @@ import ReferenceDetails from "./ReferenceDetails/ReferenceDetails.vue";
 import ReferenceList from "./ReferenceList/ReferenceList.vue";
 import {Splitpanes, Pane} from 'splitpanes';
 import { ESystemEvents } from "../types";
+import {WebSocketClient} from '@/utils/websocket';
 
 function provideReactively({ data = () => ({}), computed = {}, methods = {} }) {
 	return {
 		provide() {
-			const names = [
-				...Object.keys(data()),
-				...Object.keys(computed),
-				...Object.keys(methods),
-			];
-			return Object.fromEntries(
+			const
+				names = [
+					...Object.keys(data()),
+					...Object.keys(computed),
+					...Object.keys(methods),
+				],
+			 entries = Object.fromEntries(
 				names.map((name) => [
 					name,
 					vue_computed({
@@ -149,6 +151,11 @@ function provideReactively({ data = () => ({}), computed = {}, methods = {} }) {
 					}),
 				]),
 			);
+
+			return {
+				...entries,
+				websocket: this.websocket
+			}
 		},
 		data,
 		computed,
@@ -339,6 +346,7 @@ export default {
 	},
 	data: () => ({
 		error_messages: [],
+		websocket: new WebSocketClient('ws://localhost:3000'),
 	}),
 	watch: {
 		repo_details: {
@@ -451,6 +459,11 @@ export default {
 				theme: 'win10 dark',
 			});
 		});
+	},
+	beforeUnmount() {
+		if (this.websocket) {
+			this.websocket.close();
+		}
 	},
 	methods: {
 		async openRepo() {

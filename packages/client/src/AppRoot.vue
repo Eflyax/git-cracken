@@ -1,22 +1,7 @@
 <template>
 	<n-config-provider :theme="darkTheme">
 		<div class="app-root">
-
 			<div class="repos">
-				<!-- <draggable v-model="tabs" item-key="id" class="flex items-center overflow-x-auto">
-										<template #item="{ element: tab }">
-												<div
-														class="clickable pl-4 pr-2 py-1.5 flex gap-3 whitespace-nowrap"
-														:class="{ active: tab.id === selected_tab_id }"
-														@click="selected_tab_id = tab.id"
-												>
-														{{ tab.title ?? 'New tab' }}
-														<btn title="Close" @click="closeTab(tab)">
-																<icon name="mdi-close" class="size-4" />
-														</btn>
-												</div>
-										</template>
-								</draggable> -->
 				<n-button
 					title="Add tab"
 					type="default"
@@ -27,7 +12,7 @@
 				</n-button>
 			</div>
 
-			<div class="tab-wrapper">
+			 <div class="tab-wrapper">
 				<template v-for="tab in tabs" :key="tab.id">
 					<TabContent
 						v-if="tabs_initialized.has(tab.id)"
@@ -36,7 +21,6 @@
 					/>
 				</template>
 			</div>
-
 		</div>
 	</n-config-provider>
 </template>
@@ -44,7 +28,6 @@
 <script>
 import WindowEventMixin from '@/mixins/WindowEventMixin';
 import TabContent from './components/TabContent.vue';
-import {WebSocketClient} from './utils/websocket';
 import {electronMock} from './electronMock';
 import {darkTheme, NButton, NConfigProvider, NInput, NDatePicker, NSpace} from 'naive-ui';
 
@@ -60,13 +43,7 @@ export default {
 	mixins: [
 		WindowEventMixin('keydown', 'onKeyDown')
 	],
-	provide() {
-		return {
-			websocket: this.websocket,
-		};
-	},
 	setup() {
-
 		return {
 			darkTheme
 		}
@@ -75,7 +52,6 @@ export default {
 		tabs: [],
 		selected_tab_id: 1,
 		tabs_initialized: new Set(),
-		websocket: new WebSocketClient('ws://localhost:3000'),
 	}),
 	watch: {
 		selected_tab_id: {
@@ -92,11 +68,6 @@ export default {
 	},
 	mounted() {
 		this.addTab();
-	},
-	beforeUnmount() {
-		if (this.websocket) {
-			this.websocket.close();
-		}
 	},
 	methods: {
 		closeTab(tab) {
