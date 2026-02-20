@@ -176,18 +176,14 @@ export default {
 	},
 	methods: {
 		async saveStash() {
-			await Promise.all([
-				this.refreshHistory(),
-				this.refreshStatus(),
-				this.repo.callGit('stash')
-			]);
+			await this.repo.callGit('stash');
+			await this.refreshHistory();
+			await this.refreshStatus();
 		},
 		async popStash() {
-			await Promise.all([
-				this.refreshHistory(),
-				this.refreshStatus(),
-				this.repo.callGit('stash', 'pop')
-			]);
+			await this.repo.callGit('stash', 'pop');
+			await this.refreshHistory();
+			await this.refreshStatus();
 		},
 		// async saveWip() {
 		// 	await this.saveSelectedFile();

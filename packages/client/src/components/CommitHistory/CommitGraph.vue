@@ -8,7 +8,7 @@
 			>
 				 <g v-for="commit in commits" :key="commit.hash">
 					<rect
-						:x="CONFIG.PADDING_LEFT + commit.level * CONFIG.X_STEP"
+						:x="CONFIG.PADDING_LEFT + commit.level * CONFIG.X_STEP - 1"
 						:y="commit.index * CONFIG.Y_STEP"
 						:width="svgDimensions.width"
 						:height="CONFIG.Y_STEP - rowMarginBottom"
@@ -36,6 +36,15 @@
 							:stroke-dasharray="commit.hash === 'WORKING_TREE' || commit.isStash ? [2] : undefined"
 							fill="none"
 							opacity="0.9"
+						/>
+
+						 <line
+							v-if="commit.references.length && !commit.isStash"
+							:x1="CONFIG.PADDING_LEFT + commit.level * CONFIG.X_STEP"
+							:y1="(CONFIG.PADDING_TOP + commit.index * CONFIG.Y_STEP) - rowMarginBottom"
+							:x2="CONFIG.PADDING_LEFT + commit.level * CONFIG.X_STEP - svgDimensions.width"
+						 	:y2="(CONFIG.PADDING_TOP + commit.index * CONFIG.Y_STEP) - rowMarginBottom"
+							:stroke="getColor(commit.level)"
 						/>
 					</template>
 
