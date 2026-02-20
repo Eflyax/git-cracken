@@ -33,32 +33,31 @@
 							:d="getTopologyPath(commit, parentHash)"
 							:stroke="getColor(commit.level)"
 							:stroke-width="CONFIG.LINE_WIDTH"
-							:stroke-dasharray="commit.hash === 'WORKING_TREE' ? [2] : undefined"
+							:stroke-dasharray="commit.hash === 'WORKING_TREE' || commit.isStash ? [2] : undefined"
 							fill="none"
 							opacity="0.9"
 						/>
 					</template>
 
-					<!-- <g v-if="commit.isStash"> -->
+				 <g v-if="commit.isStash">
 						<rect
-							v-if="commit.isStash"
-							:x="CONFIG.PADDING_LEFT + commit.level * CONFIG.X_STEP - (CONFIG.CIRCLE_R * 1)"
-							:y="(CONFIG.PADDING_TOP + commit.index * CONFIG.Y_STEP) - rowMarginBottom - (CONFIG.CIRCLE_R * 1)"
+							:x="CONFIG.PADDING_LEFT + commit.level * CONFIG.X_STEP - CONFIG.CIRCLE_R"
+							:y="(CONFIG.PADDING_TOP + commit.index * CONFIG.Y_STEP) - rowMarginBottom - CONFIG.CIRCLE_R"
 							:width="CONFIG.CIRCLE_R * 2"
 							:height="CONFIG.CIRCLE_R * 2"
 							:stroke="getColor(commit.level)"
 							:stroke-width="CONFIG.LINE_WIDTH"
 							:stroke-dasharray="[2]"
 						/>
-						<!-- <image
+						<ArchiveIcon
 							:href="archiveOutline"
 							:x="CONFIG.PADDING_LEFT + commit.level * CONFIG.X_STEP - CONFIG.CIRCLE_R"
 							:y="(CONFIG.PADDING_TOP + commit.index * CONFIG.Y_STEP) - rowMarginBottom - CONFIG.CIRCLE_R"
 							:width="CONFIG.CIRCLE_R * 2"
 							:height="CONFIG.CIRCLE_R * 2"
 							:fill="getColor(commit.level)"
-						/> -->
-					<!-- </g> -->
+						/>
+					</g>
 					<circle
 						v-else
 						:cx="CONFIG.PADDING_LEFT + commit.level * CONFIG.X_STEP"
@@ -90,12 +89,13 @@ import CommitRow from './CommitRow.vue';
 import {CONFIG} from '@/settings';
 import {useStash} from '@/composables/useStash';
 // import * as archiveOutline from '@/assets/svg/archive-outline.svg';
-import archiveOutline from '@/assets/svg/archive-outline.svg?url';
+// import archiveOutline from '@/assets/svg/archive-outline.svg?url';
+import ArchiveIcon from '@/assets/svg/archive-outline.svg?component';
 
 export default {
 	components: {
 		CommitRow,
-		archiveOutline
+		ArchiveIcon
 	},
 	inject: [
 		'commits',
@@ -142,6 +142,8 @@ export default {
 		}
 	},
 	mounted() {
+
+		// console.log({archiveOutline});
 		// todo
 		// this.mergeStashesToCommits();
 	},

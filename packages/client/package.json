@@ -18,6 +18,7 @@
 		"naive-ui": "^2.43.2",
 		"pluralize": "^8.0.0",
 		"splitpanes": "^4.0.4",
+		"vite-svg-loader": "^5.1.0",
 		"vue": "^3.4.19",
 		"vue-split-panel": "^1.0.4",
 		"vue-virtual-scroller": "2.0.0-beta.3",
