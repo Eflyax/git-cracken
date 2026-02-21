@@ -1,3 +1,10 @@
+export enum ECheckStatuses {
+	Idle = 'idle',
+	Checking = 'checking',
+	Online = 'online',
+	Offline = 'offline'
+}
+
 export enum ENetworkCommands {
 	GitCall = 'git-call',
 	ReadFile = 'read-file'

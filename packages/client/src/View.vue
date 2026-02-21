@@ -37,7 +37,7 @@ import TabContent from './components/TabContent.vue';
 import {electronMock} from './electronMock';
 import {useNotification, NButton} from 'naive-ui';
 import {useProject} from './composables/useProject';
-import ProjectManager from '@/components/ProjectManager.vue';
+import ProjectManager from '@/components/ProjectManager/ProjectManager.vue';
 
 export default {
 	components: {

@@ -4,6 +4,7 @@ import type {IProject} from '@/types';
 const
 	projects = ref<IProject[]>([]),
 	openProject = ref<IProject | null>(null),
+	editableProject = ref<IProject | null>(null),
 	PROJECTS_STORAGE_KEY = 'projects';
 
 try {
@@ -76,5 +77,6 @@ export function useProject() {
 		addProject,
 		removeProject,
 		updateProject,
+		editableProject
 	};
 }

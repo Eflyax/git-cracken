@@ -2,7 +2,7 @@
 	<div class="project-manager">
 		<div class="list">
 			<n-input v-model:value="filterText" placeholder="Search projects..." />
-			<n-button @click="openAddModal" type="primary" style="margin-top: 10px;">Add Project</n-button>
+			<n-button @click="openAdd" type="primary" style="margin-top: 10px;">Add Project</n-button>
 
 			<div class="project-list">
 				<div v-for="project in filteredProjects" :key="project.id" class="project-item">
@@ -21,7 +21,7 @@
 							</template>
 						</n-button>
 						<n-button
-							@click="openEditModal(project)"
+							@click="openEdit(project)"
 							size="small"
 							type="info"
 						>
@@ -40,31 +40,7 @@
 		</div>
 
 		<div class="detail">
-			<div v-if="editableProject">
-				<n-card
-					:title="isEditing ? 'Edit Project' : 'Add Project'"
-					:bordered="false"
-					size="huge"
-					role="dialog"
-					aria-modal="true"
-				>
-					<n-form @submit.prevent="handleSave">
-						<n-form-item label="Alias">
-							<n-input v-model:value="editableProject.alias" placeholder="Project Alias" />
-						</n-form-item>
-						<n-form-item label="Path">
-							<n-input v-model:value="editableProject.path" placeholder="Project Path" />
-						</n-form-item>
-						<n-form-item label="Server">
-							<n-input v-model:value="editableProject.server" placeholder="Server Address" />
-						</n-form-item>
-						<n-form-item label="Port">
-							<n-input-number v-model:value="editableProject.port" placeholder="Port" />
-						</n-form-item>
-						<n-button type="primary" attr-type="submit">Save</n-button>
-					</n-form>
-				</n-card>
-			</div>
+			<project-form />
 		</div>
 	</div>
 </template>
@@ -72,15 +48,18 @@
 <script setup>
 import {ref, computed} from 'vue';
 import {useProject} from '@/composables/useProject';
-import {NButton, NInput, NModal, NCard, NForm, NFormItem, NInputNumber, useDialog} from 'naive-ui';
+import {NButton, NInput, useDialog} from 'naive-ui';
+import ProjectForm from '@/components/ProjectManager/ProjectForm.vue';
 
 const
 	dialog = useDialog(),
-	{projects, addProject, updateProject, removeProject, openProject} = useProject(),
+	{
+		projects,
+		editableProject,
+		removeProject,
+		openProject
+	} = useProject(),
 	filterText = ref(''),
-	showModal = ref(false),
-	isEditing = ref(false),
-	editableProject = ref(null),
 	filteredProjects = computed(() => {
 		if (!filterText.value) {
 			return projects.value;
@@ -94,38 +73,17 @@ const
 		);
 	});
 
-function openAddModal() {
-	isEditing.value = false;
+function openAdd() {
 	editableProject.value = {
 		alias: '',
 		path: '',
 		server: 'localhost',
-		port: 8000
+		port: 8_000
 	};
-	showModal.value = true;
 }
 
-function openEditModal(project) {
-	isEditing.value = true;
+function openEdit(project) {
 	editableProject.value = {...project};
-	showModal.value = true;
-}
-
-function handleSave() {
-	if (!editableProject.value.alias || !editableProject.value.path) {
-		alert('Alias and Path are required.');
-		return;
-	}
-
-	if (isEditing.value) {
-		updateProject(editableProject.value.id, editableProject.value);
-	}
-	else {
-		addProject(editableProject.value);
-	}
-	showModal.value = false;
-	editableProject.value = null;
-	success();
 }
 
 function confirmDelete(project) {
