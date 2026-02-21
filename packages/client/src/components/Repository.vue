@@ -176,8 +176,8 @@ const {
 	selected_commits,
 	setSelectedCommits,
 	loaded_all,
-	loadCommits,
-	loadMore,
+	// loadCommits,
+	// loadMore,
 } = useCommits(repo, {
 	references_by_hash,
 	hidden_references: computed(() => [...hidden_references.value]),

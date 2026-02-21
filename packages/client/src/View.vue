@@ -23,7 +23,7 @@
 	</div>
 
 	 <div class="tab-wrapper">
-		<TabContent
+		<Repository
 			v-if="currentProject"
 			:key="currentProject.id"
 		/>
@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import TabContent from './components/TabContent.vue';
+import Repository from '@/components/Repository.vue';
 import {electronMock} from './electronMock';
 import {useNotification, NButton} from 'naive-ui';
 import {useProject} from './composables/useProject';
@@ -41,7 +41,7 @@ import ProjectManager from '@/components/ProjectManager/ProjectManager.vue';
 export default {
 	components: {
 		ProjectManager,
-		TabContent,
+		Repository,
 		NButton
 	},
 	setup() {

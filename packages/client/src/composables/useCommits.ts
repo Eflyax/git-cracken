@@ -43,7 +43,7 @@ export function useCommits(
 	},
 ) {
 	const
-		commits  = ref<any[] | undefined>(undefined),
+		commits  = ref<Array<any>>([]),
 		selected_commits = ref<string[]>([]),
 		current_commit_limit = ref<number | null | undefined>(undefined);
 
