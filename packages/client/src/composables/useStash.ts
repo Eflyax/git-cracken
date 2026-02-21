@@ -1,11 +1,19 @@
-import {ref} from 'vue';
+import {ref, isRef} from 'vue';
 
 const
 	stashes = ref({});
 
-export function useStash(repo) {
+export function useStash(repoOrRef) {
+
+	function getRepo() {
+		return isRef(repoOrRef) ? repoOrRef.value : repoOrRef;
+	}
 
 	async function getStashes() {
+		const repo = getRepo();
+
+		if (!repo) return;
+
 		stashes.value = {};
 
 		const
