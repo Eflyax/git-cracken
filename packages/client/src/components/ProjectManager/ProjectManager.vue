@@ -50,6 +50,7 @@ import {ref, computed} from 'vue';
 import {useProject} from '@/composables/useProject';
 import {NButton, NInput, useDialog} from 'naive-ui';
 import ProjectForm from '@/components/ProjectManager/ProjectForm.vue';
+import {defaultConfiguration} from '@/settings';
 
 const
 	dialog = useDialog(),
@@ -75,10 +76,10 @@ const
 
 function openAdd() {
 	editableProject.value = {
-		alias: '',
+		alias: 'New repository',
 		path: '',
 		server: 'localhost',
-		port: 8_000
+		port: defaultConfiguration.ServerPort
 	};
 }
 

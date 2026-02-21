@@ -65,7 +65,7 @@
 			preset="card"
 			style="width: 800px;"
 		>
-			<file-browser />
+			<file-browser @select="onPathSelected" />
 		</NModal>
 	</div>
 </template>
@@ -111,6 +111,11 @@ function handleSave() {
 	editableProject.value = null;
 
 	success();
+}
+
+function onPathSelected(path) {
+	editableProject.value.path = path;
+	showModal.value = false;
 }
 
 function browseFiles() {
