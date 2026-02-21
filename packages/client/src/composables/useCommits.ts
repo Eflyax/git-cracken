@@ -147,50 +147,52 @@ export function useCommits() {
 		}
 	}
 
-	async function loadCommits({limit}: ILoadOptions = {}): Promise<{selectionReset: boolean}> {
-		// todo pass repo as argument
-		const
-			excluded = [...hidden_references.value, 'refs/stash'],
-			log = await repo?.value?.callGit(
-				'log',
-				..._.map(excluded, id => `--exclude=${id}`),
-				'--all',
-				'-z',
-				'--pretty=format:' + Object.values(LOG_FORMAT).join(FIELD_SEPARATOR),
-				'--date=format-local:%Y-%m-%d %H:%M',
-				...(limit == null ? [] : [`--max-count=${limit}`]),
-				'--date-order',
-			),
-			rawCommits = [
-				{ hash: 'WORKING_TREE', parents: current_head.value },
-				...mapStashes(),
-				...log
-					.split('\0')
-					.filter(Boolean)
-					.map(row => Object.fromEntries(
-						_.zip(Object.keys(LOG_FORMAT), row.split(FIELD_SEPARATOR)),
-					)),
-			];
+	// async function loadCommits({limit}: ILoadOptions = {}): Promise<{selectionReset: boolean}> {
+	// 	// todo pass repo as argument
+	// 	const
+	// 		excluded = [...hidden_references.value, 'refs/stash'],
+	// 		log = await repo?.value?.callGit(
+	// 			'log',
+	// 			..._.map(excluded, id => `--exclude=${id}`),
+	// 			'--all',
+	// 			'-z',
+	// 			'--pretty=format:' + Object.values(LOG_FORMAT).join(FIELD_SEPARATOR),
+	// 			'--date=format-local:%Y-%m-%d %H:%M',
+	// 			...(limit == null ? [] : [`--max-count=${limit}`]),
+	// 			'--date-order',
+	// 		),
+	// 		rawCommits = [
+	// 			{ hash: 'WORKING_TREE', parents: current_head.value },
+	// 			...mapStashes(),
+	// 			...log
+	// 				.split('\0')
+	// 				.filter(Boolean)
+	// 				.map(row => Object.fromEntries(
+	// 					_.zip(Object.keys(LOG_FORMAT), row.split(FIELD_SEPARATOR)),
+	// 				)),
+	// 		];
 
-		buildGraph(rawCommits);
+	// 	buildGraph(rawCommits);
 
-		if (commits.value === undefined) {
-			setSelectedCommits(['WORKING_TREE']);
-		}
+	// 	if (commits.value === undefined) {
+	// 		setSelectedCommits(['WORKING_TREE']);
+	// 	}
 
-		commits.value = Object.freeze(rawCommits);
-		current_commit_limit.value = limit ?? null;
+	// 	commits.value = Object.freeze(rawCommits);
+	// 	current_commit_limit.value = limit ?? null;
 
-		const selectionReset = !selected_commits.value.every(
-			hash => commit_by_hash.value[hash] !== undefined,
-		);
+	// 	const selectionReset = !selected_commits.value.every(
+	// 		hash => commit_by_hash.value[hash] !== undefined,
+	// 	);
 
-		if (selectionReset) {
-			setSelectedCommits([]);
-		}
+	// 	if (selectionReset) {
+	// 		setSelectedCommits([]);
+	// 	}
 
-		return {selectionReset};
-	}
+	// 	return {
+	// 		selectionReset
+	// 	};
+	// }
 
 	async function loadMore() {
 		const next_limit =
@@ -198,7 +200,7 @@ export function useCommits() {
 				? null
 				: current_commit_limit.value * COMMIT_LIMIT_MULTIPLIER;
 
-		return loadCommits({limit: next_limit});
+		// return loadCommits({limit: next_limit});
 	}
 
 	return {
@@ -208,7 +210,7 @@ export function useCommits() {
 		setSelectedCommits,
 		loaded_all,
 		current_commit_limit,
-		loadCommits,
+		// loadCommits,
 		loadMore,
 		COMMIT_LIMIT_MULTIPLIER,
 	};

@@ -17,6 +17,7 @@
 				@keydown.esc="clearSearch()"
 				@paste="search()"
 			/>
+
 			<template v-if="search_index !== null">
 				<div class="px-2">
 					{{ search_index + 1 }} / {{ search_hashes.length }}
@@ -59,14 +60,6 @@
 					:size="commit_refs_column_size"
 					class="pane-branches"
 				>
-					  <!-- <div class="list-branch">
-							<CommitRefsRow
-								v-for="commit in commits"
-								:key="commit.hash"
-								:commit="commit"
-							/>
-					 </div> -->
-
 					<div class="list-branches" :style="{ paddingTop: '0px' }">
 						<CommitRefsRow
 							v-for="commit in commits"
@@ -74,7 +67,6 @@
 							:commit="commit"
 							:style="{
 								height: `${CONFIG.Y_STEP - 1}px`
-								// todo: why Y_STEP - 1 ???
 							}"
 						/>
 					</div>
@@ -231,7 +223,11 @@ export default {
 	},
 	methods: {
 		async load() {
-			await Promise.all([this.loadHistory(), this.loadStatus(), this.loadStashes()]);
+			await Promise.all([
+				this.loadStatus(),
+				this.loadStashes(),
+				this.loadHistory(),
+			]);
 		},
 		async loadHistory({ skip_references = false, limit } = {}) {
 			if (!skip_references) {
