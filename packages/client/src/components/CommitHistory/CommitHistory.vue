@@ -114,9 +114,7 @@
 </template>
 
 <script>
-import ElectronEventMixin from "@/mixins/ElectronEventMixin";
 import StoreMixin from "@/mixins/StoreMixin";
-import WindowEventMixin from "@/mixins/WindowEventMixin";
 import { getStatus } from "@/utils/git";
 import CommitGraph from "./CommitGraph.vue";
 import CommitRefsRow from "./CommitRefsRow.vue";
@@ -126,9 +124,9 @@ import {Splitpanes, Pane} from 'splitpanes';
 import {CONFIG} from '@/settings';
 import {useStash} from "@/composables/useStash";
 import {useCommits} from '@/composables/useCommits';
+//
 const field_separator = "\x06";
 const commit_limit_multiplier = 4;
-import {inject} from 'vue';
 
 export default {
 	mixins: [
@@ -136,8 +134,6 @@ export default {
 		StoreMixin("commit_graph_column_size", 10),
 		StoreMixin("commit_history_initial_limit", 100),
 		StoreMixin("commit_history_search_limit", null),
-		ElectronEventMixin("window-focus", "load"),
-		WindowEventMixin("keydown", "onKeyDown"),
 	],
 	components: {
 		CommitGraph,
@@ -167,13 +163,12 @@ export default {
 	],
 	setup() {
 		const
-			repo = inject('repo'),
-			{getStashes, stashes} = useStash(repo.value),
+			{loadStashes, stashes} = useStash(),
 			{commits} = useCommits();
 
 		return {
 			commits,
-			getStashes,
+			loadStashes,
 			stashes
 		};
 	},
@@ -236,7 +231,7 @@ export default {
 	},
 	methods: {
 		async load() {
-			await Promise.all([this.loadHistory(), this.loadStatus(), this.getStashes()]);
+			await Promise.all([this.loadHistory(), this.loadStatus(), this.loadStashes()]);
 		},
 		async loadHistory({ skip_references = false, limit } = {}) {
 			if (!skip_references) {

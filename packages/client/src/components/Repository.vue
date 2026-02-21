@@ -144,7 +144,11 @@ const repo = computed(() => {
 		]),
 	);
 
+	// @deprecated
 	const callGitOverWebSocket = async (...args) => {
+
+		console.warn('callGitOverWebSocket - you are using an outdated method')
+
 		const payload = {repo_path: currentProject.value.path, args};
 		return await handleErrors(websocket.value.call('git-call', payload));
 	};
@@ -164,8 +168,6 @@ const repo = computed(() => {
 const references_by_hash = computed(() => _.groupBy(references.value, 'hash'));
 const references_by_type = computed(() => _.groupBy(references.value, 'type'));
 const current_head       = computed(() => references_by_type.value.head?.[0]?.hash);
-
-// const {stashes, getStashes} = useStash(repo);
 
 const {
 	commit_by_hash,
@@ -366,7 +368,6 @@ provide('working_tree_files',  pw(() => working_tree_files.value,  v => (working
 provide('selected_file',       pw(() => selected_file.value,       v => (selected_file.value       = v)));
 provide('save_semaphore',      pw(() => save_semaphore.value,      v => (save_semaphore.value      = v)));
 provide('commitHistoryKey',    pw(() => commitHistoryKey.value,    v => (commitHistoryKey.value    = v)));
-// provide('stashes',             pw(() => stashes.value,             v => (stashes.value             = v)));
 
 // Readonly computed
 provide('repo', repo);
@@ -387,5 +388,4 @@ provide('updateFileStatus',     updateFileStatus);
 provide('saveSelectedFile',     saveSelectedFile);
 provide('refreshHistory',       refreshHistory);
 provide('refreshStatus',        refreshStatus);
-// provide('getStashes',           getStashes);
 </script>

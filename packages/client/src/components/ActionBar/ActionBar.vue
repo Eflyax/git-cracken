@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import WindowEventMixin from '@/mixins/WindowEventMixin';
+// import WindowEventMixin from '@/mixins/WindowEventMixin';
 import BranchModal from './BranchModal.vue';
 import {NButton} from 'naive-ui';
 import {useStash} from '@/composables/useStash';
@@ -43,7 +43,7 @@ export default {
 		BranchModal,
 		NButton
 	},
-	mixins: [WindowEventMixin("keydown", "onKeyDown")],
+	// mixins: [WindowEventMixin("keydown", "onKeyDown")],
 	inject: [
 		"tab_active",
 		"repo",
@@ -60,13 +60,13 @@ export default {
 	],
 	setup() {
 		const
-			{stashes, getStashes} = useStash(),
+			{stashes, loadStashes} = useStash(),
 			{callGit} = useGit();
 
 		return {
 			callGit,
 			stashes,
-			getStashes
+			loadStashes
 		}
 	},
 	data: () => ({
@@ -189,12 +189,12 @@ export default {
 	methods: {
 		async saveStash() {
 			await this.callGit('stash');
-			await this.getStashes();
+			await this.loadStashes();
 			await this.refreshStatus();
 		},
 		async popStash() {
 			await this.callGit('stash', 'pop');
-			await this.getStashes();
+			await this.loadStashes();
 			await this.refreshStatus();
 		},
 		// async saveWip() {

@@ -96,9 +96,7 @@
 import { editor as monaco_editor } from "monaco-editor";
 import monaco_metadata from "monaco-editor/esm/metadata";
 import { createApp } from "vue";
-import ElectronEventMixin from "@/mixins/ElectronEventMixin";
 import StoreMixin from "@/mixins/StoreMixin";
-import WindowEventMixin from "@/mixins/WindowEventMixin";
 import { isFileBinary } from "@/utils/git";
 import Btn from "@/widgets/btn.vue";
 import Icon from "@/widgets/icon.vue";
@@ -180,11 +178,6 @@ export default {
 		StoreMixin("side_by_side_ratio", 0.5),
 		StoreMixin("whitespace_diff", true),
 		StoreMixin("word_wrap", false),
-
-		ElectronEventMixin("window-blur", "save"),
-
-		WindowEventMixin("keydown", "onKeyDown"),
-		WindowEventMixin("beforeunload", "onBeforeUnload"),
 	],
 	inject: [
 		"tab_active",

@@ -7,7 +7,7 @@ const
 export function useStash() {
 	const {callGit} = useGit();
 
-	async function getStashes() {
+	async function loadStashes() {
 		stashes.value = {};
 
 		const
@@ -29,7 +29,7 @@ export function useStash() {
 	};
 
 	return {
-		getStashes,
+		loadStashes,
 		stashes
 	};
 }
