@@ -37,5 +37,6 @@ export interface IProject {
 	path: string;
 	server: string;
 	port: number;
+	dateCreated: number;
 	dateLastOpen: number;
 }

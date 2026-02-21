@@ -32,7 +32,6 @@
 </template>
 
 <script>
-import WindowEventMixin from '@/mixins/WindowEventMixin';
 import TabContent from './components/TabContent.vue';
 import {electronMock} from './electronMock';
 import {useNotification, NButton} from 'naive-ui';

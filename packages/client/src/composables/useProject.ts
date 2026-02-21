@@ -32,6 +32,7 @@ export function useProject() {
 				id: generateId(),
 				order: projects.value.length,
 				dateLastOpen: Date.now(),
+				dateCreated: Date.now(),
 			};
 
 		projects.value.push(newProject);
@@ -82,9 +83,14 @@ export function useProject() {
 	}
 
 	function openProject(project) {
-		project = updateProject(project.id, {dateLastOpen: Date.now()});
-		currentProject.value = project;
-		saveProjects();
+		if (project) {
+			project = updateProject(project.id, {dateLastOpen: Date.now()});
+			currentProject.value = project;
+			saveProjects();
+		}
+		else {
+			currentProject.value = null;
+		}
 	}
 
 	return {

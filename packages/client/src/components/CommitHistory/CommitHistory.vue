@@ -417,7 +417,6 @@ export default {
 					),
 				],
 				occupied_levels = {},
-				// running_commits = new Set(),
 				remaining_parents = {},
 				children = {};
 
@@ -462,7 +461,6 @@ export default {
 
 				if (commit.parents.length > 0) {
 					occupied_levels[commit.level] = commit;
-					// running_commits.add(commit);
 				}
 
 				for (const child of children[commit.hash] ?? []) {
@@ -472,10 +470,8 @@ export default {
 						if (child.level !== commit.level) {
 							delete occupied_levels[child.level];
 						}
-						// running_commits.delete(child);
 					}
 				}
-				// commit.running_commits = [...running_commits];
 			}
 
 			if (this.commits === undefined) {
