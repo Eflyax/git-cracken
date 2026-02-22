@@ -44,6 +44,12 @@ export function useCommits() {
 		return Object.fromEntries(commits.value.map(c => [c.hash, c]));
 	});
 
+	const commitMap = computed(() => {
+		const map = new Map();
+		commits.value.forEach(c => map.set(c.hash, c));
+		return map;
+	});
+
 	const loaded_all = computed(() =>
 		current_commit_limit.value === null ||
 		(current_commit_limit.value ?? 0) > (commits.value?.length ?? 0) - 1,
@@ -213,5 +219,6 @@ export function useCommits() {
 		// loadCommits,
 		loadMore,
 		COMMIT_LIMIT_MULTIPLIER,
+		commitMap
 	};
 }
